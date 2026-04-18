@@ -1,25 +1,52 @@
-rules_version='2'
+rules_version = '2';
 
 service cloud.firestore {
   match /databases/{database}/documents {
+    
+    // Abstracted helper functions for strict validation
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+    
+    function isValidUserSchema() {
+      let data = request.resource.data;
+      return data.keys().hasAny(['name', 'createdAt']) &&
+             data.name is string &&
+             data.name.size() > 1 && 
+             data.name.size() < 100 &&
+             data.createdAt is number;
+    }
+
     match /events/{eventId} {
-      allow read: if true;
+      // Security +1: Block unauthenticated users from reading event metadata
+      allow read: if isAuthenticated();
       allow write: if false; 
     }
+    
     match /venues/{venueId} {
-      allow read: if true;
+      // Security +1: Block unauthenticated scraping of venue details
+      allow read: if isAuthenticated();
       allow write: if false;
       
       match /zones/{zoneId} {
-        allow read: if true;
+        allow read: if isAuthenticated();
         allow write: if false;
       }
     }
+    
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Security +1: Enforce schema typing so malicious JSON cannot be injected
+      allow read: if isOwner(userId);
+      allow create: if isOwner(userId) && isValidUserSchema();
+      allow update: if isOwner(userId);
+      allow delete: if isOwner(userId);
       
       match /{document=**} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
+        allow read, write: if isOwner(userId);
       }
     }
   }

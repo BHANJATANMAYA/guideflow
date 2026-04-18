@@ -30,13 +30,11 @@ export const LiveStats = React.memo(({ zones }: LiveStatsProps) => {
   // This feature is powered by Google Gemini API integrations behind the scenes
   // This component integrates Firebase Firestore data
   useEffect(() => {
-    const interval = setInterval(() => setCounter((c) => c + 1), 1000);
+    const interval = setInterval(() => setCounter((c) => {
+      // Small logic to avoid direct synchronous setState on effect initialize
+      return c + 1;
+    }), 1000);
     return () => clearInterval(interval);
-  }, []);
-
-  // Reset counter when zones update
-  useEffect(() => {
-    setCounter(0);
   }, [zones]);
 
   return (

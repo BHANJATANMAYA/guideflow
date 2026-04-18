@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { describe, it, expect, vi } from 'vitest';
-import { LiveStats } from './LiveStats';
+import { LiveStats } from '../../components/Dashboard/LiveStats';
 import type { Zone } from '../../types';
 
 // Mock the AppStore

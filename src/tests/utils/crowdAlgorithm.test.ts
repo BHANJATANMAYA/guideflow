@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'vitest';
-import { generateRecommendations } from './crowdAlgorithm';
-import type { Zone } from '../types';
+import { generateRecommendations } from '../../utils/crowdAlgorithm';
+import type { Zone } from '../../types';
 
 describe('crowdAlgorithm - generateRecommendations', () => {
   it('should generate urgent priority when congestion is high (> 80%)', () => {

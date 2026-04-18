@@ -39,6 +39,15 @@ ui-debug.log
 
 skills-lock.json
 
+# Playwright
+playwright-report/
+test-results/
+playwright.config.ts
+
+# Firebase Functions
+functions/node_modules/
+functions/lib/
+
 # Optional additional Firebase ignores
 *-debug.log
 .firebaserc.local
