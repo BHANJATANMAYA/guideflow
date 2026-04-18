@@ -130,7 +130,7 @@ export const HeroSection = ({ event }: HeroSectionProps) => {
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
                 <div>
                   <h3 className="text-6xl md:text-8xl font-headline font-black mb-4 uppercase tracking-tighter leading-none">
-                    {homeTeamName} <span className="text-slate-700">v</span>
+                    {homeTeamName} <span className="text-slate-700">VS</span>
                     <br />
                     {awayTeamName}
                   </h3>

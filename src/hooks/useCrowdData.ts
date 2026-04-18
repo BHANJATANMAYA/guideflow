@@ -8,6 +8,7 @@ export const useCrowdData = (venueId: string) => {
 
   useEffect(() => {
     const unsub = getDataService().subscribeToZones(venueId, (z) => {
+      console.log("React Hook received data:", z);
       setZones(z);
       setLoading(false);
     });

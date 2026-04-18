@@ -1,22 +1,38 @@
-
-import { useUserStore } from "../../store/useUserStore";
-import { PreferencesGrid } from "./PreferencesGrid";
-import { ConnectedDevices } from "./ConnectedDevices";
-import { ActivityTimeline } from "./ActivityTimeline";
+import { useState, type ReactNode } from "react";
 import {
-  LucideTrophy,
   LucideCalendar,
-  LucideUserCheck,
   LucideLogOut,
   LucideSettings,
+  LucideTrophy,
+  LucideUserCheck,
 } from "lucide-react";
 
+import { signOutSession } from "../../services/authService";
+import { useAppStore } from "../../store/useAppStore";
+import { useUserStore } from "../../store/useUserStore";
+import { ActivityTimeline } from "./ActivityTimeline";
+import { ConnectedDevices } from "./ConnectedDevices";
+import { PreferencesGrid } from "./PreferencesGrid";
+
 export const UserProfile = () => {
-  const { user } = useUserStore();
+  const [isSigningOut, setIsSigningOut] = useState(false);
+  const { setActiveTab } = useAppStore();
+  const { authProvider, resetAuthSession, user } = useUserStore();
+
+  const handleSignOut = async () => {
+    setIsSigningOut(true);
+
+    try {
+      await signOutSession();
+      resetAuthSession();
+      setActiveTab("dashboard");
+    } finally {
+      setIsSigningOut(false);
+    }
+  };
 
   return (
     <div className="space-y-12 pb-24">
-      {/* Header section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6">
         <div className="space-y-3">
           <div className="flex items-center gap-2">
@@ -31,20 +47,30 @@ export const UserProfile = () => {
               Identity
             </span>
           </h1>
+          <p className="text-sm uppercase tracking-[0.24em] text-slate-500 font-black">
+            {authProvider === "google" ? user.email || "Google session" : "Demo session active"}
+          </p>
         </div>
 
         <div className="flex gap-4">
-          <button className="p-4 rounded-2xl bg-surface-container-high border border-white/5 text-slate-400 hover:text-white transition-all">
+          <button
+            type="button"
+            className="p-4 rounded-2xl bg-surface-container-high border border-white/5 text-slate-400 hover:text-white transition-all"
+          >
             <LucideSettings size={20} />
           </button>
-          <button className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
+          <button
+            type="button"
+            onClick={handleSignOut}
+            disabled={isSigningOut}
+            className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all disabled:opacity-50"
+          >
             <LucideLogOut size={20} />
           </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-        {/* Profile Stats Card */}
         <div className="lg:col-span-4 space-y-8">
           <div className="glass-card rounded-[2.5rem] p-10 border border-white/5 relative overflow-hidden group hover:neon-glow-primary transition-all duration-500">
             <div className="relative z-10 flex flex-col items-center text-center">
@@ -59,6 +85,7 @@ export const UserProfile = () => {
               <h2 className="text-3xl font-headline font-black text-on-surface uppercase tracking-tight mb-2">
                 {user.name}
               </h2>
+              <p className="text-sm text-slate-400 mb-4 break-all">{user.email || "demo@guideflow.local"}</p>
               <p className="text-[10px] font-black text-primary-container uppercase tracking-[0.3em] bg-primary-container/10 px-4 py-1.5 rounded-full inline-flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary-container animate-pulse" />
                 {user.vipLevel} ACCESS LEVEL
@@ -82,14 +109,12 @@ export const UserProfile = () => {
                 />
               </div>
             </div>
-            {/* Background Decor */}
             <div className="absolute top-0 right-0 w-48 h-48 bg-primary-container/5 blur-3xl rounded-full translate-x-1/2 -translate-y-1/2" />
           </div>
 
           <ConnectedDevices />
         </div>
 
-        {/* Dashboard Components */}
         <div className="lg:col-span-8 space-y-8">
           <PreferencesGrid />
           <ActivityTimeline />
@@ -106,7 +131,7 @@ const ProfileStat = ({
 }: {
   label: string;
   value: string;
-  icon: React.ReactNode;
+  icon: ReactNode;
 }) => (
   <div className="space-y-1 text-center">
     <div className="flex items-center justify-center gap-1.5 text-slate-500 mb-1">
@@ -118,3 +143,4 @@ const ProfileStat = ({
     <p className="text-xl font-headline font-black text-on-surface">{value}</p>
   </div>
 );
+

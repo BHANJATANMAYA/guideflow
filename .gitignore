@@ -24,3 +24,24 @@ dist-ssr
 *.sw?
 .env
 package-lock.json
+FIREBASE_SETUP.md
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.log.*
+firestore-debug.log
+ui-debug.log
+
+# Vite Environments
+.env.local
+.env.*.local
+
+skills-lock.json
+
+# Optional additional Firebase ignores
+*-debug.log
+.firebaserc.local
+.agents/
+.claude/
+.continue/
