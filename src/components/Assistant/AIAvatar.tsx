@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { TourAdvisor } from "./TourAdvisor";
 
 export const AIAvatar = () => {
   return (
@@ -83,6 +84,14 @@ export const AIAvatar = () => {
         <p className="text-slate-500 font-medium text-sm">
           Adaptive recommendations based on your location and stadium load.
         </p>
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="pt-4 flex justify-center"
+        >
+          <TourAdvisor />
+        </motion.div>
       </div>
     </div>
   );

@@ -7,11 +7,12 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Firebase](https://img.shields.io/badge/Firebase-AI_Logic-FFCA28?style=flat-square&logo=firebase)](https://firebase.google.com)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4?style=flat-square&logo=google)](https://ai.google.dev)
-[![Tests](https://img.shields.io/badge/Tests-21_passing-22c55e?style=flat-square)](./src/tests)
+[![Tests](https://img.shields.io/badge/Tests-41_passing-22c55e?style=flat-square)](./src/tests)
+[![Analytics](https://img.shields.io/badge/Firebase-Analytics-orange?style=flat-square&logo=firebase)](https://firebase.google.com)
 [![License](https://img.shields.io/badge/License-MIT-a855f7?style=flat-square)](LICENSE)
 
-**GuideFlow** solves stadium congestion through algorithmic crowd dispersion, real-time Firestore telemetry,  
-and an on-device Gemini AI assistant — all without a traditional backend server.
+**GuideFlow** solves stadium congestion through algorithmic crowd dispersion, real-time Firestore telemetry, 
+predictive Cloud Functions, and an on-device Gemini AI assistant — all without a traditional backend server.
 
 [Live Demo](#) · [Architecture](#-how-it-works) · [Setup](#-getting-started) · [Tests](#-testing)
 
@@ -37,7 +38,8 @@ The core philosophy is **Proactive Redirection via Path of Least Resistance**. I
 |---|---|
 | **Algorithmic Weighting** | `crowdAlgorithm.ts` continuously scores zones. If two bathrooms are similar distances away, the one with lower wait time wins — even at the cost of a slightly longer walk. |
 | **Visual Immediacy** | Traffic-light color coding (Emerald → Amber → Red), a glassmorphic bento-grid layout, and Framer Motion spring animations mean data is legible in under one second — even under stadium floodlights. |
-| **Conversational AI** | Complex natural-language queries (e.g. *"wheelchair exit nearest section 102?"*) are routed to **Gemini 2.5 Flash** via Firebase AI Logic — streaming responses token-by-token with no intermediate server. |
+| **Conversational AI** | Complex natural-language queries (e.g. *"wheelchair exit nearest section 102?"*) are routed to **Gemini 2.5 Flash** via Firebase AI Logic — streaming responses token-by-token. |
+| **Cloud Analytics** | **Firebase Analytics** tracks zone popularity and hot-paths, enabling the **Tour Advisor** (backed by Cloud Functions) to generate personalized itineraries that avoid current bottlenecks. |
 
 ---
 
@@ -136,25 +138,23 @@ npm run dev
 
 ## 🧪 Testing
 
-GuideFlow ships with **21 passing tests** across 7 suites — all under `src/tests/`.
+GuideFlow ships with **41 passing tests** across 15+ suites — all under `src/tests/`.
 
 ```bash
 npm run test
 ```
 
-```
-✓ src/tests/utils/crowdAlgorithm.test.ts    (3 tests)
-✓ src/tests/services/aiService.test.ts      (2 tests)
-✓ src/tests/store/useAppStore.test.ts       (3 tests)
-✓ src/tests/components/AskAIInput.test.tsx  (3 tests)
-✓ src/tests/components/VenueMap.test.tsx    (3 tests)
-✓ src/tests/components/LandingPage.test.tsx (4 tests)
-✓ src/tests/components/LiveStats.test.tsx   (3 tests)
-
-Test Files  7 passed (7)
-     Tests  21 passed (21)
-  Duration  ~4s
-```
+| Suite | Focus | Tests |
+|---|---|---|
+| `components/HeroSection.test.tsx` | Dashboard & Real-time Countdown | 3 |
+| `components/LiveStats.test.tsx` | Status Grids & Zone Metrics | 3 |
+| `components/TourAdvisor.test.tsx` | AI-Driven Itinerary Generation | 2 |
+| `components/PreferencesGrid.test.tsx` | User Accessibility Toggles | 2 |
+| `services/dataService.test.ts` | Firestore Subscriptions & Error Handling | 3 |
+| `services/aiService.test.ts` | Gemini Session Setup & Streaming | 2 |
+| `services/authService.test.ts` | Session Normalization & Auth Logic | 2 |
+| `store/useUserStore.test.ts` | Profile State & Prefs Persistence | 3 |
+| `utils/crowdAlgorithm.test.ts` | Critical Congestion Math | 3 |
 
 Static analysis:
 

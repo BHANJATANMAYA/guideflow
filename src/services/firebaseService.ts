@@ -18,6 +18,11 @@ import type {
 import { getFirestoreDb } from "./firebaseClient";
 
 export class FirebaseService implements DataService {
+  /**
+   * Subscribes to real-time updates for venue zones.
+   * @param venueId The unique identifier for the venue
+   * @param callback Function to execute with the updated list of zones
+   */
   subscribeToZones(
     venueId: string,
     callback: (zones: Zone[]) => void,
@@ -25,6 +30,7 @@ export class FirebaseService implements DataService {
     const db = getFirestoreDb();
 
     if (!db) {
+      console.warn("[FirebaseService] Firestore DB not initialized.");
       callback([]);
       return () => {};
     }
@@ -41,13 +47,20 @@ export class FirebaseService implements DataService {
           (documentSnapshot) =>
             ({ id: documentSnapshot.id, ...documentSnapshot.data() }) as Zone,
         );
-        console.log("Firestore data (zones):", zones);
         callback(zones);
       },
-      () => callback([]),
+      (error) => {
+        console.error(`[FirebaseService] Error subscribing to zones for ${venueId}:`, error);
+        callback([]);
+      },
     );
   }
 
+  /**
+   * Subscribes to real-time updates for a specific event.
+   * @param eventId The event identifier
+   * @param callback Function to execute with the updated event data
+   */
   subscribeToEvent(
     eventId: string,
     callback: (event: VenueEvent | null) => void,
@@ -68,7 +81,10 @@ export class FirebaseService implements DataService {
             : null,
         );
       },
-      () => callback(null),
+      (error) => {
+        console.error(`[FirebaseService] Error subscribing to event ${eventId}:`, error);
+        callback(null);
+      },
     );
   }
 
@@ -136,30 +152,42 @@ export class FirebaseService implements DataService {
     );
   }
 
+  /**
+   * Set the rush hour status of an event.
+   */
   async toggleRushHour(eventId: string, isRushHour: boolean): Promise<void> {
     const db = getFirestoreDb();
-    if (!db) {
-      return;
-    }
+    if (!db) return;
 
-    await updateDoc(doc(db, "events", eventId), {
-      rushHour: isRushHour,
-    });
+    try {
+      await updateDoc(doc(db, "events", eventId), {
+        rushHour: isRushHour,
+      });
+    } catch (error) {
+      console.error(`[FirebaseService] Failed to toggle rush hour for ${eventId}:`, error);
+      throw error;
+    }
   }
 
+  /**
+   * Update the user's current location in Firestore.
+   */
   async updateUserLocation(userId: string, zoneId: string): Promise<void> {
     const db = getFirestoreDb();
-    if (!db) {
-      return;
-    }
+    if (!db) return;
 
-    await setDoc(
-      doc(db, "users", userId),
-      {
-        currentZoneId: zoneId,
-        lastSeen: Date.now(),
-      },
-      { merge: true },
-    );
+    try {
+      await setDoc(
+        doc(db, "users", userId),
+        {
+          currentZoneId: zoneId,
+          lastSeen: Date.now(),
+        },
+        { merge: true },
+      );
+    } catch (error) {
+      console.error(`[FirebaseService] Failed to update location for user ${userId}:`, error);
+      throw error;
+    }
   }
 }

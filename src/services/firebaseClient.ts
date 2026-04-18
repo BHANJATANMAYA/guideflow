@@ -1,3 +1,4 @@
+import { getAnalytics, type Analytics } from "firebase/analytics";
 import { getApp, getApps, initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, type Auth } from "firebase/auth";
 import { getFirestore, type Firestore } from "firebase/firestore";
@@ -9,6 +10,7 @@ const firebaseConfig = {
   storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
   appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
 const PLACEHOLDER_PATTERNS = [/\.\.\./, /your-app/i, /yourkey/i, /^123456789$/, /abcdef/i];
@@ -41,6 +43,14 @@ export const getFirebaseAuth = (): Auth | null => {
 export const getFirestoreDb = (): Firestore | null => {
   const app = getFirebaseApp();
   return app ? getFirestore(app) : null;
+};
+
+export const getFirebaseAnalytics = (): Analytics | null => {
+  const app = getFirebaseApp();
+  if (app && typeof window !== "undefined") {
+    return getAnalytics(app);
+  }
+  return null;
 };
 
 export const createGoogleProvider = () => {

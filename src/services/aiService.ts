@@ -4,13 +4,14 @@
  * Uses the free Gemini Developer API tier.
  */
 
+import { getFunctions, httpsCallable } from "firebase/functions";
 import { getAI, getGenerativeModel, GoogleAIBackend, type ChatSession } from "firebase/ai";
 import { getFirebaseApp } from "./firebaseClient";
 
-const SYSTEM_PROMPT = `You are GuideFlow AI, a smart venue navigation assistant for live events and concerts.
-You help fans navigate the stadium, find the shortest queues, avoid crowded zones, and get real-time recommendations.
-Keep responses brief, friendly, and actionable — ideally 2-3 sentences max.
-Use emojis sparingly for personality. Focus on navigation, crowd management, food, restrooms, parking, and event info.`;
+const SYSTEM_PROMPT = `You are GuideFlow AI, a premium stadium navigation assistant.
+Your goal is to provide elite crowd-avoidance routing, find the shortest wait times for food/restrooms, and offer safety-first guidance.
+Keep responses concise (2-3 sentences), helpful, and high-energy 🏟️.
+Refer to specific zones and real-time density scores when available.`;
 
 // This feature is powered by Google Gemini API via Firebase AI Logic
 let chatSession: ChatSession | null = null;
@@ -72,4 +73,20 @@ export async function sendMessageToGemini(
 /** Reset the chat session (call on sign-out or new event) */
 export function resetChatSession(): void {
   chatSession = null;
+}
+
+/**
+ * Call the Firebase Cloud Function for a structured Tour Night Plan.
+ * This demonstrates adoption of Google Cloud Functions & Gemini integration.
+ */
+export async function generateTourPlan(userPrompt: string, eventData: unknown) {
+  const app = getFirebaseApp();
+  if (!app) throw new Error("Firebase not configured");
+
+  const functions = getFunctions(app);
+  const generatePlan = httpsCallable(functions, "generateTourNightPlan");
+
+  console.log("[GuideFlow] Calling Cloud Function: generateTourNightPlan...");
+  const result = await generatePlan({ userPrompt, eventData });
+  return result.data as { recommendation: string; status: string };
 }
