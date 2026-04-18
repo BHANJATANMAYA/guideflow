@@ -1,3 +1,4 @@
+import React from "react";
 import { motion } from "framer-motion";
 import type { Zone } from "../../types";
 import {
@@ -13,7 +14,7 @@ interface LiveStatsProps {
   zones: Zone[];
 }
 
-export const LiveStats = ({ zones }: LiveStatsProps) => {
+export const LiveStats = React.memo(({ zones }: LiveStatsProps) => {
   const { setActiveTab } = useAppStore();
 
   const totalCapacity = zones.reduce((acc, z) => acc + z.capacity, 0);
@@ -35,7 +36,7 @@ export const LiveStats = ({ zones }: LiveStatsProps) => {
       <QuickActionsGrid />
     </div>
   );
-};
+});
 
 const CrowdDensityCard = ({ density }: { density: number }) => (
   <div className="md:col-span-4 md:row-span-1 group">

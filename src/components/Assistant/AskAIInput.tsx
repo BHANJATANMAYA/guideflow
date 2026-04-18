@@ -25,10 +25,11 @@ export const AskAIInput = () => {
         />
 
         <div className="flex items-center gap-1 pr-2">
-          <button className="w-10 h-10 rounded-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/5 transition-all">
+          <button aria-label="Voice input" className="w-10 h-10 rounded-full flex items-center justify-center text-slate-500 hover:text-white hover:bg-white/5 transition-all">
             <LucideMic size={20} />
           </button>
           <button
+            aria-label="Send message"
             disabled={!query}
             className={`w-12 h-12 rounded-full flex items-center justify-center transition-all ${
               query

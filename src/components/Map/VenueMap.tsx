@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   LucideLayers,
   LucideMapPin,
@@ -19,7 +19,7 @@ interface VenueMapProps {
   zones: Zone[];
 }
 
-export const VenueMap = ({ zones }: VenueMapProps) => {
+export const VenueMap = React.memo(({ zones }: VenueMapProps) => {
   const {
     activeZoneId,
     heatmapEnabled,
@@ -134,7 +134,7 @@ export const VenueMap = ({ zones }: VenueMapProps) => {
       <div className="absolute -bottom-40 -right-40 w-[600px] h-[600px] bg-primary-container/5 rounded-full blur-[150px] pointer-events-none" />
     </div>
   );
-};
+});
 
 const MapControlButton = ({
   active,

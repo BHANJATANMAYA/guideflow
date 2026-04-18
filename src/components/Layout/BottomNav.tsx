@@ -33,6 +33,7 @@ export const BottomNav = () => {
                 item.id as "dashboard" | "map" | "assistant" | "profile",
               )
             }
+            aria-label={item.label}
             className="relative flex flex-col items-center gap-1 group"
           >
             {isActive && (
