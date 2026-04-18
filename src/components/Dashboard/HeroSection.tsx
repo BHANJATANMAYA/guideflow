@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { LucideTimer, LucideCloudSun, LucideZap } from "lucide-react";
 import type { VenueEvent } from "../../types";
@@ -9,8 +9,10 @@ interface HeroSectionProps {
   event: VenueEvent | null;
 }
 
-export const HeroSection = ({ event }: HeroSectionProps) => {
+export const HeroSection = React.memo(({ event }: HeroSectionProps) => {
   const [now, setNow] = useState<number | null>(null);
+  
+  // This UI consumes real-time event data from Firestore
   const { user } = useUserStore();
   const { setActiveTab } = useAppStore();
 
@@ -234,7 +236,7 @@ export const HeroSection = ({ event }: HeroSectionProps) => {
       </div>
     </div>
   );
-};
+});
 
 const MockTeamLogo = ({ color }: { color: string }) => (
   <div className="w-14 h-14 rounded-full bg-surface-container-high border-4 border-surface-container flex items-center justify-center shadow-2xl relative overflow-hidden">

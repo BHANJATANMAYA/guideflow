@@ -65,9 +65,10 @@ export const CardDeck = () => {
               <motion.div
                 key={recommendation.id}
                 layout
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, x: 20 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
                 <RecommendationCard
                   recommendation={recommendation}

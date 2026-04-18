@@ -51,7 +51,16 @@ export const VenueMap = React.memo(({ zones }: VenueMapProps) => {
   }, [activeZone, zones]);
 
   return (
-    <div className="w-full h-full glass-panel rounded-[3rem] p-6 lg:p-10 relative overflow-hidden flex flex-col items-center justify-center border-2 border-white/5 shadow-2xl">
+    <div className="w-full h-full glass-panel rounded-[3rem] p-6 lg:p-10 relative overflow-hidden flex flex-col items-center justify-center border-2 border-white/5 shadow-2xl transition-all">
+      {zones.length === 0 && (
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-surface-container-lowest/80 backdrop-blur-md">
+          <div className="flex flex-col items-center gap-4">
+            <div className="w-12 h-12 rounded-full border-4 border-primary-container border-t-transparent animate-spin"/>
+            <span className="text-[10px] font-black uppercase tracking-widest text-primary-container animate-pulse">Initializing Layout Grid</span>
+          </div>
+        </div>
+      )}
+
       <div className="absolute top-10 left-10 z-20 space-y-2 pointer-events-none">
         <h3 className="text-4xl font-headline font-black text-on-surface uppercase tracking-tighter leading-none">
           Stadium Dynamics
@@ -121,7 +130,7 @@ export const VenueMap = React.memo(({ zones }: VenueMapProps) => {
             setSelectedRoute(recommendedRoute);
           }
         }}
-        className="absolute top-1/2 right-10 -translate-y-1/2 z-20 w-16 h-48 glass-panel border border-white/5 rounded-full flex flex-col items-center justify-center gap-6 hover:bg-white/5 transition-all group disabled:cursor-not-allowed disabled:opacity-40"
+        className="absolute top-1/2 right-10 -translate-y-1/2 z-20 w-16 h-48 glass-panel border border-white/5 rounded-full flex flex-col items-center justify-center gap-6 hover:bg-white/10 hover:scale-105 transition-all group disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:scale-100"
       >
         <span className="[writing-mode:vertical-lr] font-headline font-black text-[10px] uppercase tracking-[0.4em] text-slate-500 group-hover:text-primary-container transition-colors">
           Route Finder
@@ -156,7 +165,7 @@ const MapControlButton = ({
       aria-pressed={active}
       aria-label={label}
       onClick={onClick}
-      className={`w-14 h-14 rounded-2xl flex items-center justify-center transition-all ${
+      className={`w-14 h-14 rounded-2xl flex items-center justify-center hover:scale-110 transition-all duration-300 ${
         active
           ? "bg-primary-container text-on-primary-container shadow-[0_0_30px_rgba(0,245,160,0.4)]"
           : "bg-surface-container-high/80 backdrop-blur-xl text-slate-400 border border-white/5 hover:text-on-surface hover:border-white/20"

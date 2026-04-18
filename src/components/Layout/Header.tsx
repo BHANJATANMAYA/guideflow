@@ -40,20 +40,29 @@ export const Header = () => {
       </button>
 
       <nav className="hidden md:flex items-center gap-1 bg-surface-container-low/50 p-1.5 rounded-2xl border border-white/5">
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            type="button"
-            onClick={() => setActiveTab(item.id)}
-            className={`px-6 py-2.5 rounded-xl font-headline text-xs font-bold tracking-widest uppercase transition-all duration-300 ${
-              activeTab === item.id
-                ? "bg-primary-container text-on-primary-container shadow-lg shadow-primary-container/20"
-                : "text-slate-400 hover:text-white hover:bg-white/5"
-            }`}
-          >
-            {item.label}
-          </button>
-        ))}
+        {navItems.map((item) => {
+          const isActive = activeTab === item.id;
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveTab(item.id)}
+              className={`relative px-6 py-2.5 rounded-xl font-headline text-xs font-bold tracking-widest uppercase transition-colors duration-300 ${
+                isActive ? "text-on-primary-container" : "text-slate-400 hover:text-white"
+              }`}
+            >
+              {isActive && (
+                <motion.div
+                  layoutId="header-active-pill"
+                  className="absolute inset-0 bg-primary-container shadow-lg shadow-primary-container/20 rounded-xl"
+                  style={{ zIndex: 0 }}
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{item.label}</span>
+            </button>
+          );
+        })}
       </nav>
 
       <div className="flex items-center gap-3">

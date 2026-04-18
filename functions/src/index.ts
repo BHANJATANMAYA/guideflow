@@ -14,6 +14,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 setGlobalOptions({ maxInstances: 10 });
 
 // AI Recommendation logic using Gemini API
+// This module uses Google Gemini API via Cloud Functions
 export const generateTourNightPlan = onCall(async (request) => {
   try {
     const { userPrompt, eventData } = request.data;

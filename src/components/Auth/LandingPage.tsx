@@ -1,5 +1,5 @@
-import { startTransition, useState, type ReactNode } from "react";
-import { motion } from "framer-motion";
+import { startTransition, useState, useEffect, useRef, type ReactNode } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import {
   LucideArrowRight,
   LucideLogIn,
@@ -24,6 +24,25 @@ export const LandingPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { setActiveTab } = useAppStore();
   const { applyAuthSession } = useUserStore();
+
+  // Parallax Ambient Orbs
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springX = useSpring(mouseX, { stiffness: 50, damping: 30 });
+  const springY = useSpring(mouseY, { stiffness: 50, damping: 30 });
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      // Map to roughly -50 to 50 based on screen percentage
+      const percentX = (e.clientX / window.innerWidth) - 0.5;
+      const percentY = (e.clientY / window.innerHeight) - 0.5;
+      mouseX.set(percentX * 100);
+      mouseY.set(percentY * 100);
+    };
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, [mouseX, mouseY]);
 
   const enterDemo = async () => {
     const trimmedName = name.trim();
@@ -74,9 +93,15 @@ export const LandingPage = () => {
     <div className="min-h-screen overflow-hidden bg-surface-container-lowest text-on-surface relative">
       <div className="absolute inset-0 dynamic-mesh opacity-80" />
       
-      {/* Decorative Blur Orbs */}
-      <div className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-primary-container/10 blur-[120px] pointer-events-none" />
-      <div className="absolute top-[40%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-secondary-container/10 blur-[150px] pointer-events-none" />
+      {/* Decorative Interactive Focus Orbs */}
+      <motion.div 
+        style={{ x: springX, y: springY }}
+        className="absolute -top-[20%] -left-[10%] w-[50vw] h-[50vw] rounded-full bg-primary-container/10 blur-[120px] pointer-events-none" 
+      />
+      <motion.div 
+        style={{ x: useTransform(springX, (v) => -v), y: useTransform(springY, (v) => -v) }}
+        className="absolute top-[40%] -right-[20%] w-[60vw] h-[60vw] rounded-full bg-secondary-container/10 blur-[150px] pointer-events-none" 
+      />
       
       {/* Subtle overlay grid lines */}
       <div className="absolute inset-0 pointer-events-none opacity-[0.03]" style={{
@@ -184,27 +209,31 @@ export const LandingPage = () => {
                   </label>
 
                   <div className="flex flex-col gap-4">
-                    <button
-                      type="button"
-                      onClick={enterDemo}
-                      disabled={isSubmitting}
-                      className="group/btn flex w-full items-center justify-center gap-3 rounded-2xl bg-primary-container px-6 py-5 text-sm font-headline font-black uppercase tracking-[0.2em] text-on-primary-container transition-all hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_20px_rgba(0,245,160,0.4)] disabled:opacity-70 disabled:pointer-events-none"
-                    >
-                      <span className="relative z-10">Launch Dashboard</span>
-                      <LucideArrowRight size={20} className="relative z-10 group-hover/btn:translate-x-1 transition-transform" />
-                    </button>
+                    <MagneticWrapper>
+                      <button
+                        type="button"
+                        onClick={enterDemo}
+                        disabled={isSubmitting}
+                        className="group/btn flex w-full items-center justify-center gap-3 rounded-2xl bg-primary-container px-6 py-5 text-sm font-headline font-black uppercase tracking-[0.2em] text-on-primary-container transition-all hover:scale-[1.02] active:scale-[0.98] hover:shadow-[0_0_20px_rgba(0,245,160,0.4)] disabled:opacity-70 disabled:pointer-events-none"
+                      >
+                        <span className="relative z-10">Launch Dashboard</span>
+                        <LucideArrowRight size={20} className="relative z-10 group-hover/btn:translate-x-1 transition-transform" />
+                      </button>
+                    </MagneticWrapper>
 
-                    <button
-                      type="button"
-                      onClick={enterWithGoogle}
-                      disabled={isSubmitting || !isGoogleSignInAvailable}
-                      className="group/btn flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-sm font-headline font-black uppercase tracking-[0.2em] text-on-surface transition-all hover:bg-white/10 hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-50 hover:text-white"
-                    >
-                      <LucideLogIn size={20} className="text-slate-400 group-hover/btn:text-white transition-colors" />
-                      {isGoogleSignInAvailable
-                        ? "Authenticate via Google"
-                        : "Google Auth Locked"}
-                    </button>
+                    <MagneticWrapper>
+                      <button
+                        type="button"
+                        onClick={enterWithGoogle}
+                        disabled={isSubmitting || !isGoogleSignInAvailable}
+                        className="group/btn flex w-full items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/5 px-6 py-5 text-sm font-headline font-black uppercase tracking-[0.2em] text-on-surface transition-all hover:bg-white/10 hover:border-white/20 disabled:cursor-not-allowed disabled:opacity-50 hover:text-white"
+                      >
+                        <LucideLogIn size={20} className="text-slate-400 group-hover/btn:text-white transition-colors" />
+                        {isGoogleSignInAvailable
+                          ? "Authenticate via Google"
+                          : "Google Auth Locked"}
+                      </button>
+                    </MagneticWrapper>
                   </div>
                 </div>
 
@@ -259,3 +288,36 @@ const FeatureCard = ({
     </h3>
   </div>
 );
+
+const MagneticWrapper = ({ children }: { children: ReactNode }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 150, damping: 15, mass: 0.1 });
+  const springY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
+
+  const handleMouse = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const { left, top, width, height } = ref.current.getBoundingClientRect();
+    const centerX = left + width / 2;
+    const centerY = top + height / 2;
+    x.set((e.clientX - centerX) * 0.2); // 20% pull
+    y.set((e.clientY - centerY) * 0.2);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      onMouseMove={handleMouse}
+      onMouseLeave={handleMouseLeave}
+      style={{ x: springX, y: springY }}
+    >
+      {children}
+    </motion.div>
+  );
+};

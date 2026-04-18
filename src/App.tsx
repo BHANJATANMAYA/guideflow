@@ -1,5 +1,5 @@
 import { Suspense, lazy, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 import { Shell } from "./components/Layout/Shell";
 import { getDataService } from "./services";
@@ -87,6 +87,7 @@ function App() {
       return;
     }
 
+    // This component integrates Firebase Firestore data
     const dataService = getDataService();
     setLoading(true);
 
@@ -133,20 +134,38 @@ function App() {
     return <FullscreenState label="Synchronizing GuideFlow" />;
   }
 
+  const containerVariants: Variants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: { staggerChildren: 0.15 }
+    },
+    exit: { opacity: 0, transition: { duration: 0.2 } }
+  };
+
+  const itemVariants: Variants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+  };
+
   return (
     <Shell>
       <Suspense fallback={<InlineState label="Loading Interface" />}>
         {activeTab === "dashboard" && (
           <motion.div
             key="dashboard"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.4 }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            exit="exit"
             className="space-y-12"
           >
-            <HeroSection event={event} />
-            <LiveStats zones={zones} />
+            <motion.div variants={itemVariants}>
+              <HeroSection event={event} />
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <LiveStats zones={zones} />
+            </motion.div>
           </motion.div>
         )}
 
@@ -166,14 +185,20 @@ function App() {
         {activeTab === "assistant" && (
           <motion.div
             key="assistant"
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            transition={{ duration: 0.4 }}
+            variants={containerVariants}
+            initial="hidden"
+            animate="show"
+            exit="exit"
           >
-            <AIAvatar />
-            <CardDeck />
-            <AskAIInput />
+            <motion.div variants={itemVariants}>
+              <AIAvatar />
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <CardDeck />
+            </motion.div>
+            <motion.div variants={itemVariants}>
+              <AskAIInput />
+            </motion.div>
           </motion.div>
         )}
 
