@@ -3,10 +3,17 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { UserProfile } from '../../components/Profile/UserProfile';
 import React from 'react';
 
-const mockSignOut = vi.fn();
+const mockSignOutSession = vi.fn();
+const mockResetAuthSession = vi.fn();
 const mockUpdatePreference = vi.fn();
+
+vi.mock('../../services/authService', () => ({
+  signOutSession: () => mockSignOutSession()
+}));
+
 vi.mock('../../store/useUserStore', () => ({
   useUserStore: vi.fn(() => ({
+    authProvider: 'google',
     user: { 
       name: 'John Doe', 
       email: 'john@example.com',
@@ -26,7 +33,7 @@ vi.mock('../../store/useUserStore', () => ({
       largeTextEnabled: false
     },
     updatePreference: mockUpdatePreference,
-    signOut: mockSignOut
+    resetAuthSession: mockResetAuthSession
   }))
 }));
 
@@ -37,10 +44,14 @@ describe('UserProfile Component', () => {
     expect(screen.getByText(/john@example\.com/i)).toBeDefined();
   });
 
-  it('handles sign out', () => {
+  it('handles sign out', async () => {
     render(<UserProfile />);
     const logoutBtn = screen.getByLabelText(/Sign Out/i);
     fireEvent.click(logoutBtn);
-    expect(mockSignOut).toHaveBeenCalled();
+    
+    await waitFor(() => {
+      expect(mockSignOutSession).toHaveBeenCalled();
+      expect(mockResetAuthSession).toHaveBeenCalled();
+    });
   });
 });
