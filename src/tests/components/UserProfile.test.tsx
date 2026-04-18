@@ -4,6 +4,7 @@ import { UserProfile } from '../../components/Profile/UserProfile';
 import React from 'react';
 
 const mockSignOut = vi.fn();
+const mockUpdatePreference = vi.fn();
 vi.mock('../../store/useUserStore', () => ({
   useUserStore: vi.fn(() => ({
     user: { 
@@ -15,6 +16,16 @@ vi.mock('../../store/useUserStore', () => ({
       missionsCompleted: 5,
       eventsAttended: 2
     },
+    preferences: {
+      notificationsEnabled: true,
+      soundEffectsEnabled: true,
+      vibrationEnabled: false,
+      crowdAvoidanceMode: true,
+      arDirectionsEnabled: false,
+      highContrastMode: false,
+      largeTextEnabled: false
+    },
+    updatePreference: mockUpdatePreference,
     signOut: mockSignOut
   }))
 }));
@@ -28,7 +39,7 @@ describe('UserProfile Component', () => {
 
   it('handles sign out', () => {
     render(<UserProfile />);
-    const logoutBtn = screen.getByText(/Sign Out/i);
+    const logoutBtn = screen.getByLabelText(/Sign Out/i);
     fireEvent.click(logoutBtn);
     expect(mockSignOut).toHaveBeenCalled();
   });

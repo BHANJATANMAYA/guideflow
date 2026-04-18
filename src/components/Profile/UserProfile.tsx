@@ -55,6 +55,7 @@ export const UserProfile = () => {
         <div className="flex gap-4">
           <button
             type="button"
+            aria-label="Settings"
             className="p-4 rounded-2xl bg-surface-container-high border border-white/5 text-slate-400 hover:text-white transition-all"
           >
             <LucideSettings size={20} />
@@ -63,6 +64,7 @@ export const UserProfile = () => {
             type="button"
             onClick={handleSignOut}
             disabled={isSigningOut}
+            aria-label="Sign Out"
             className="p-4 rounded-2xl bg-rose-500/10 border border-rose-500/10 text-rose-500 hover:bg-rose-500 hover:text-white transition-all disabled:opacity-50"
           >
             <LucideLogOut size={20} />
