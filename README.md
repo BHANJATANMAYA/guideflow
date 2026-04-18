@@ -1,61 +1,92 @@
-# GuideFlow — Smart Event Navigation Companion
+# 💠 GuideFlow — Intelligent Event Navigation Pulse
 
-Built for high-energy environments like stadiums and convention centers, GuideFlow uses **Kinetic Pulse** design and real-time data intelligence to optimize the visitor experience.
+[![License: MIT](https://img.shields.io/badge/License-MIT-00f5a0.svg)](https://opensource.org/licenses/MIT)
+[![React](https://img.shields.io/badge/React-20232a?style=flat&logo=react&logoColor=61dafb)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=flat&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 
-![GuideFlow Demo](https://placehold.co/1200x600/080c25/00f5a0?text=GuideFlow+Pulse+Core+v3.0)
+GuideFlow is a premium, real-time spatial intelligence platform designed for high-density environments. It transforms static venue maps into living networks using **Kinetic Pulse** design and proactive AI assistance.
 
-## 🎯 Chosen Vertical
-**Smart Venue & Mega-Event Navigation**
-GuideFlow is designed for large-scale venues (stadiums, arenas, festivals) where complex crowd dynamics, high-density traffic, and time-sensitive movement are critical challenges. It bridges the gap between venue operations and attendee experience through live spatial intelligence.
-
-## 🧠 Approach & Logic
-
-### Intelligent Logic Layer
-GuideFlow utilizes a rule-based engine to process environmental data and provide proactive assistance:
-- **Congestion Detection**: Monitors zone density in real-time. If occupancy exceeds 80%, the system automatically flags the area as "Crowded" and begins searching for lower-density alternatives.
-- **Dynamic Rerouting**: When a primary goal (e.g., washroom, gate) is congested, the algorithm identifies the nearest "Open" alternative of the same type to redirect traffic.
-- **Predictive Tips**: Analyzes event timing (e.g., minutes until kickoff) to trigger priority alerts, encouraging users to find their seats before the "Rush Hour" bias kicks in.
-
-### Technical Approach
-- **Atomic State Management**: Uses **Zustand** to handle high-frequency data updates without UI lag, ensuring the "Kinetic Pulse" remains smooth.
-- **Mock-First Architecture**: Built around a robust `MockDataService` that simulates real-world sensors, crowd flux, and unpredictable event changes.
-- **Vector-First Visualization**: Entire venue maps are built using procedurally managed SVG paths, allowing for infinite zoom and real-time heatmap overlays without heavy asset loads.
-
-## 🛠️ How it Works
-
-1. **The Pulse (Data Source)**: Every 5 seconds, the `MockDataService` simulates a new update for each venue zone. It introduces random fluctuations (±4%) and applies "Rush Hour" biases to simulate realistic attendee behavior.
-2. **The Brain (Logic)**: The `crowdAlgorithm` processes the raw zone data, calculating wait times based on density/capacity and generating prioritized recommendations (Urgent, Opportunity, Tip).
-3. **The Interface (UI)**: The Bento-style dashboard and interactive map render these insights using Framer Motion for micro-interactions, providing users with instant situational awareness.
-
-## 📝 Assumptions Made
-
-- **Coordinate System**: Assumes the venue can be represented on a simplified 2D coordinate grid for distance and routing calculations.
-- **Linear Density/Wait Model**: The wait time for any zone is assumed to be a linear function of its current density relative to its capacity.
-- **Static Infrastructure**: Assumes the physical layout of the venue (gates, food courts, zones) is fixed during the event duration.
-- **Uniform User Response**: Assumes users will prioritize shorter wait times and follow recommendations when presented with "Urgent" alerts.
+![GuideFlow Dashboard Mockup](https://placehold.co/1200x640/04101a/00f5a0?text=GUIDEFLOW+COMMAND+CENTER+v3.1)
 
 ---
 
-## 🚀 Key Features
+## 🎯 Project Overview
 
-- **Dynamic Dashboard**: Live match tracking, atmosphere analysis, and trending zones.
-- **Interactive Arena Map**: Procedurally generated SVG stadium with real-time crowd heatmap overlays.
-- **AI Assistant**: Smart recommendation engine with a card-deck interface.
-- **Command Center**: User profile with hardware sync (Watches, AR glasses).
+### Chosen Vertical
+**Smart Venue & Mega-Event Navigation**
+GuideFlow targets the "Last Mile" of the attendee experience at large-scale physical events (stadiums, festivals, international summits). In these environments, traditional GPS often fails, and static signage cannot adapt to sudden crowd surges or security incidents. GuideFlow acts as a digital nervous system for the venue, providing attendees with a real-time "Pulse" of their environment.
 
-## 🛠️ Tech Stack
+### Approach and Logic
+Our approach prioritizes **Proactive Navigation over Reactive Searching**.
+- **The Kinetic Pulse**: Instead of static status indicators, we use a continuous data stream that "pulses" through the UI, indicating high-energy zones and movement trends.
+- **Cognitive Load Reduction**: The UI uses a "Bento Grid" layout to surface only the most critical information (wait times, seat location, AI alerts) at a glance.
+- **Logic Engine**: 
+  - **Threshold Monitoring**: Zones are continuously evaluated against their capacity. Reaching 75% capacity triggers "Crowded" status; 90% triggers automatic "Redirect" logic.
+  - **Type-Matching**: When a specific zone (e.g., Washroom East) is blocked, the engine searches for the nearest alternative with the same `type` attribute.
 
-- **Framework**: React 18 + Vite + TypeScript
-- **State**: Zustand
-- **Animation**: Framer Motion
-- **Styling**: Tailwind CSS 4.0
-- **Icons**: Lucide React + Material Symbols
+---
 
-## 📦 Quick Start
+## 🛠️ How the Solution Works
 
-```bash
-npm install
-npm run dev
-```
+GuideFlow operates on a tri-layer architecture that combines real-time data with premium visual fidelity.
 
-© 2026 GUIDEFLOW SYSTEMS • PULSE CORE v3.0
+### 1. Data Ingestion (The Source)
+The system supports two modes of operation:
+- **Live Mode**: Subscribes to **Firebase Firestore** collections. Real-time snapshots update the state whenever crowd levels, event scores, or security statuses change.
+- **Mock Mode**: A high-fidelity simulation engine that replicates crowd flux, random incidents, and gate fluctuations for testing and offline demos.
+
+### 2. State Orchestration (The Brain)
+Using **Zustand**, GuideFlow maintains a centralized "Pulse Store."
+- **Atomic Updates**: Only specific components (like a single sector on the map) re-render when their underlying data changes, maintaining 60fps even with complex SVG animations.
+- **AI Recommendation Engine**: Filters current environmental conditions through a set of priority rules to surface Urgent (Red), Opportunity (Gold), and Informational (Blue) cards.
+
+### 3. Kinetic Interface (The Pulse)
+- **SVG Heatmaps**: A procedurally managed stadium map where each sector is a dynamic component that changes color and opacity based on real-time density.
+- **Glassmorphic UI**: High-end visual effects using Tailwind CSS and Framer Motion to create a "Tactile Command Center" feel.
+
+---
+
+## 📝 Assumptions Made
+
+To ensure a robust and performant demo, the following technical assumptions were integrated:
+- **Zonal Resolution**: We assume the venue is divided into discrete "Zones" (segments) rather than tracking individual point coordinates, which optimizes Firebase bandwidth and battery life.
+- **Linear Congestion**: Wait times are calculated as a linear function of `(CurrentCount / Capacity) * BaseMetric`.
+- **Infrastructure Persistence**: The physical coordinates of gates and facilities are assumed to be fixed, though their *status* (Open/Closed) is dynamic.
+- **Connectivity Model**: The system is designed with an "Optimistic UI" approach, assuming intermittent connectivity common in crowded stadiums; the last known pulse is cached locally.
+
+---
+
+## 🚀 Technical Implementation
+
+### Tech Stack
+- **Framework**: React 19 + TypeScript 5.7
+- **Database**: Firebase (Firestore + Authentication)
+- **State**: Zustand (Atomic State Orchestration)
+- **Animation**: Framer Motion (Kinetic Micro-interactions)
+- **Styling**: Tailwind CSS 4.0 (Modern Design System)
+- **Icons**: Lucide React + Google Material Symbols
+
+### Getting Started
+
+1.  **Clone & Install**:
+    ```bash
+    npm install
+    ```
+2.  **Environment Setup**:
+    Copy `.env.example` to `.env` and add your Firebase credentials.
+3.  **Database Seeding**:
+    ```bash
+    npm run seed:firebase
+    ```
+4.  **Run Development**:
+    ```bash
+    npm run dev
+    ```
+
+[**View Firebase Setup Guide**](file:///x:/Dev/googlevwars/guideflow/FIREBASE_SETUP.md)
+
+---
+
+© 2026 GUIDEFLOW SYSTEMS • PULSE CORE v3.1
