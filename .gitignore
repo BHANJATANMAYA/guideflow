@@ -54,3 +54,5 @@ functions/lib/
 .agents/
 .claude/
 .continue/
+e2e/
+functions/
