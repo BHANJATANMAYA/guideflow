@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript)](https://typescriptlang.org)
 [![Firebase](https://img.shields.io/badge/Firebase-AI_Logic-FFCA28?style=flat-square&logo=firebase)](https://firebase.google.com)
 [![Gemini](https://img.shields.io/badge/Gemini-2.5_Flash-4285F4?style=flat-square&logo=google)](https://ai.google.dev)
-[![Tests](https://img.shields.io/badge/Tests-41_passing-22c55e?style=flat-square)](./src/tests)
+[![Tests](https://img.shields.io/badge/Tests-37_passing-22c55e?style=flat-square)](./src/tests)
 [![Analytics](https://img.shields.io/badge/Firebase-Analytics-orange?style=flat-square&logo=firebase)](https://firebase.google.com)
 [![License](https://img.shields.io/badge/License-MIT-a855f7?style=flat-square)](LICENSE)
 
@@ -138,7 +138,7 @@ npm run dev
 
 ## 🧪 Testing
 
-GuideFlow ships with **41 passing tests** across 15+ suites — all under `src/tests/`.
+GuideFlow ships with **37 passing tests** across 15 suites — all under `src/tests/`.
 
 ```bash
 npm run test
@@ -146,13 +146,13 @@ npm run test
 
 | Suite | Focus | Tests |
 |---|---|---|
-| `components/HeroSection.test.tsx` | Dashboard & Real-time Countdown | 3 |
+| `components/HeroSection.test.tsx` | Dashboard & Real-time Countdown | 2 |
 | `components/LiveStats.test.tsx` | Status Grids & Zone Metrics | 3 |
 | `components/TourAdvisor.test.tsx` | AI-Driven Itinerary Generation | 2 |
 | `components/PreferencesGrid.test.tsx` | User Accessibility Toggles | 2 |
 | `services/dataService.test.ts` | Firestore Subscriptions & Error Handling | 3 |
 | `services/aiService.test.ts` | Gemini Session Setup & Streaming | 2 |
-| `services/authService.test.ts` | Session Normalization & Auth Logic | 2 |
+| `services/authService.test.ts` | Session Normalization & Auth Logic | 1 |
 | `store/useUserStore.test.ts` | Profile State & Prefs Persistence | 3 |
 | `utils/crowdAlgorithm.test.ts` | Critical Congestion Math | 3 |
 
