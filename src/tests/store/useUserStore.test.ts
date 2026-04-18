@@ -1,5 +1,6 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { useUserStore } from '../../store/useUserStore';
+import type { AuthSession } from '../../services/authService';
 
 describe('useUserStore', () => {
   beforeEach(() => {
@@ -15,15 +16,15 @@ describe('useUserStore', () => {
   });
 
   it('should apply auth session correctly', () => {
-    const mockSession = {
+    const mockSession: AuthSession = {
       uid: 'u123',
       email: 'test@example.com',
       name: 'Test User',
       avatar: 'https://test.url',
       provider: 'google'
-    } as const;
+    };
     
-    useUserStore.getState().applyAuthSession(mockSession as any);
+    useUserStore.getState().applyAuthSession(mockSession);
     
     const state = useUserStore.getState();
     expect(state.isAuthenticated).toBe(true);

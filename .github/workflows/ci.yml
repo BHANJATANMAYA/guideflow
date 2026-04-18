@@ -23,6 +23,12 @@ jobs:
       
     - name: Run Linting
       run: npm run lint
+
+    - name: Security Audit
+      run: npm audit --audit-level=moderate
+      
+    - name: Type Checking
+      run: npx tsc --noEmit
       
     - name: Run Unit Tests
       run: npm run test -- --run

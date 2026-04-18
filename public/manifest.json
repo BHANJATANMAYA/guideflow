@@ -1,0 +1,26 @@
+{
+  "short_name": "GuideFlow",
+  "name": "GuideFlow | Intelligent Crowd Navigation",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/icons/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/icons/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#042436",
+  "background_color": "#042436",
+  "description": "Intelligent crowd navigation for stadiums and live events, powered by real-time Firestore data and Gemini AI."
+}
