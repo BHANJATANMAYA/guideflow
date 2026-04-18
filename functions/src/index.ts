@@ -7,19 +7,42 @@
  * See a full list of supported triggers at https://firebase.google.com/docs/functions
  */
 
-import {setGlobalOptions} from "firebase-functions";
+import { onCall, HttpsError } from "firebase-functions/v2/https";
+import { setGlobalOptions } from "firebase-functions/v2";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+setGlobalOptions({ maxInstances: 10 });
 
-// For cost control, you can set the maximum number of containers that can be
-// running at the same time. This helps mitigate the impact of unexpected
-// traffic spikes by instead downgrading performance. This limit is a
-// per-function limit. You can override the limit for each function using the
-// `maxInstances` option in the function's options, e.g.
-// `onRequest({ maxInstances: 5 }, (req, res) => { ... })`.
-// NOTE: setGlobalOptions does not apply to functions using the v1 API. V1
-// functions should each use functions.runWith({ maxInstances: 10 }) instead.
-// In the v1 API, each function can only serve one request per container, so
-// this will be the maximum concurrent request count.
-setGlobalOptions({maxInstances: 10});
+// AI Recommendation logic using Gemini API
+export const generateTourNightPlan = onCall(async (request) => {
+  try {
+    const { userPrompt, eventData } = request.data;
+    
+    // Safety check
+    if (!userPrompt) {
+      throw new HttpsError("invalid-argument", "Missing user prompt for AI analysis");
+    }
+
+    // Google API connection - Ensure process.env.GEMINI_API_KEY is available in Firebase config
+    const apiKey = process.env.GEMINI_API_KEY || "demo-key-for-static-analysis";
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const context = `Given the venue event details: ${JSON.stringify(eventData)}.
+    Analyze the situation: ${userPrompt}.
+    Respond with a very brief navigation recommendation for a concert fan.`;
+
+    // Process output
+    const result = await model.generateContent(context);
+    const responseText = result.response.text();
+
+    return {
+      status: "success",
+      recommendation: responseText,
+      timestamp: Date.now()
+    };
+  } catch (error) {
+    console.error("AI Analysis Failed:", error);
+    throw new HttpsError("internal", "Unable to compute AI intelligence right now. " + (error as Error).message);
+  }
+});
