@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { HeroSection } from '../../components/Dashboard/HeroSection';
-import React from 'react';
+import type { VenueEvent } from '../../types';
 
 // Simplified mock
 vi.mock('../../store/useUserStore', () => ({
@@ -17,16 +17,15 @@ vi.mock('../../store/useAppStore', () => ({
 }));
 
 describe('HeroSection Component', () => {
-  const mockEvent: Partial<VenueEvent> = {
+  const mockEvent: VenueEvent = {
     id: 'e1',
     name: 'Champion Finals',
-    location: 'Stadium Arena',
     startTime: Date.now() + 100000,
     activeUsers: 15000,
     rushHour: false,
     teams: {
-      home: { name: 'Lions', winProb: 60 },
-      away: { name: 'Titans', winProb: 40 }
+      home: { name: 'Lions', logo: 'lions-logo', winProb: 60 },
+      away: { name: 'Titans', logo: 'titans-logo', winProb: 40 }
     },
     weather: { temp: 22, condition: 'Sunny' }
   };

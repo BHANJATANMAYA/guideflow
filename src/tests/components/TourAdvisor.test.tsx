@@ -1,7 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { TourAdvisor } from '../../components/Assistant/TourAdvisor';
-import React from 'react';
 
 // Explicitly mock aiService first
 vi.mock('../../services/aiService', () => ({

@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import { Header } from '../../components/Layout/Header';
-import React from 'react';
 
 vi.mock('../../store/useAppStore', () => ({
   useAppStore: vi.fn(() => ({

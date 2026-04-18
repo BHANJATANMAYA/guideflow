@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BottomNav } from '../../components/Layout/BottomNav';
-import React from 'react';
 
 const mockSetActiveTab = vi.fn();
 vi.mock('../../store/useAppStore', () => ({
